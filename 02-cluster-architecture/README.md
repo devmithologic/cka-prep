@@ -14,8 +14,12 @@ This domain covers how Kubernetes clusters work internally and how to set them u
 - [ ] Understand CRDs, install and configure operators
 
 ## Section Contents
+> ⚠️ **Important:** Content could be not updated on this graphic.
+
+> TODO: Update this everytime I cover a new topic
 
 ```
+
 02-cluster-architecture/
 ├── README.md
 ├── control-plane-components/
@@ -38,6 +42,7 @@ This domain covers how Kubernetes clusters work internally and how to set them u
 
 - [control-plane.md](control-plane.md)
 - [etcd.md](etcd.md)
+- [pods.md](pods.md)
 
 ## Control Plane Architecture
 
