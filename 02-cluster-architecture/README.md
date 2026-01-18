@@ -33,8 +33,11 @@ This domain covers how Kubernetes clusters work internally and how to set them u
 ├── crds-operators.md
 └── labs/
 ```
+
 ### Control Plane Components
-* [etcd.md](etcd.md)
+
+- [control-plane.md](control-plane.md)
+- [etcd.md](etcd.md)
 
 ## Control Plane Architecture
 
