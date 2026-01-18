@@ -40,7 +40,7 @@ flowchart TB
 
 The kube-apiserver is the **primary management component** and the central hub for all cluster operations.
 
-### Responsibilities
+### Responsibilities - Kube-API Server
 
 1. **Authentication** - Validates who you are
 2. **Authorization** - Checks what you can do
@@ -113,6 +113,7 @@ The kube-controller-manager runs **controller processes** that regulate cluster 
 ### What is a Controller?
 
 A controller continuously:
+
 1. **Monitors** the state of specific resources
 2. **Compares** current state vs desired state
 3. **Takes action** to reconcile differences
@@ -183,6 +184,7 @@ flowchart TD
 ### Phase 1: Filtering
 
 Eliminates nodes that cannot run the pod:
+
 - Insufficient CPU/Memory
 - Node selector doesn't match
 - Taints not tolerated
@@ -191,12 +193,14 @@ Eliminates nodes that cannot run the pod:
 ### Phase 2: Scoring
 
 Ranks remaining nodes based on:
+
 - Available resources after scheduling
 - Spreading pods across nodes
 - Affinity preferences
 - Custom priorities
 
 **Example:** If a pod needs 4 CPU, and two nodes qualify:
+
 - Node A: Would have 2 CPU free after → Score: Lower
 - Node B: Would have 6 CPU free after → Score: Higher ✓
 
@@ -216,7 +220,7 @@ Ranks remaining nodes based on:
 
 The kubelet is the **agent that runs on every node** (including control plane nodes in some setups). It's responsible for actually running pods.
 
-### Responsibilities
+### Responsibilities - Kubelet
 
 1. **Register node** with the cluster via API server
 2. **Watch API server** for pod assignments to this node
@@ -306,7 +310,8 @@ flowchart TD
 3. Rules forward traffic destined for Service IP → actual Pod IP
 
 **Example iptables rule:**
-```
+
+```plain-text
 Traffic to 10.96.0.1 (Service) → Forward to 10.32.0.15 (Pod)
 ```
 
@@ -336,7 +341,7 @@ kubectl get daemonset kube-proxy -n kube-system
 
 All control plane components run as **static pods** with manifests in:
 
-```
+```plain-text
 /etc/kubernetes/manifests/
 ├── etcd.yaml
 ├── kube-apiserver.yaml
@@ -348,7 +353,7 @@ All control plane components run as **static pods** with manifests in:
 
 Components run as **systemd services**:
 
-```
+```plain-text
 /etc/systemd/system/
 ├── kube-apiserver.service
 ├── kube-controller-manager.service

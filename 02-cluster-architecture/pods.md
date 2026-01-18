@@ -16,6 +16,7 @@ flowchart TB
 ```
 
 **Key concepts:**
+
 - A Pod is a **single instance** of an application
 - Containers are **encapsulated** inside Pods
 - Kubernetes never deploys containers directly—always through Pods
@@ -64,6 +65,7 @@ spec:
 ### Multi-Container Pod (Rare)
 
 Used for **helper/sidecar containers** that:
+
 - Support the main application
 - Must share the same lifecycle
 - Need to communicate via localhost
@@ -79,6 +81,7 @@ flowchart LR
 ```
 
 **What Kubernetes handles automatically for multi-container Pods:**
+
 - Shared network namespace (localhost communication)
 - Shared storage volumes
 - Same lifecycle (created and destroyed together)
@@ -152,6 +155,7 @@ metadata:
 ```
 
 **Rules:**
+
 - Use **2 spaces** for indentation (never tabs)
 - Be consistent throughout the file
 - Children must be indented more than parents
@@ -159,7 +163,7 @@ metadata:
 
 ### Structure Visualization
 
-```
+```plain-text
 metadata:           # Parent (0 spaces)
   name: myapp       # Child of metadata (2 spaces)
   labels:           # Sibling of name (2 spaces)
@@ -250,6 +254,7 @@ kubectl run nginx --image=nginx --dry-run=client -o yaml > pod.yaml
 ```
 
 This is extremely useful for:
+
 - Getting the correct structure
 - Avoiding typos
 - Quick exam answers
@@ -288,3 +293,9 @@ stateDiagram-v2
 5. **Use 2-space indentation**, never tabs
 6. **Use `--dry-run=client -o yaml`** to generate templates quickly
 7. Pods share network and storage by default between their containers
+
+---
+
+[Back to 02-cluster-architecture](README.md)
+
+[Back to root folder](../README.md)

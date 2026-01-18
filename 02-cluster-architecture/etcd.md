@@ -22,6 +22,7 @@ flowchart LR
 | **Key-Value Store** | None | No | Very flexible | Simple, fast lookups |
 
 Key-value stores are ideal for Kubernetes because:
+
 - Fast read/write operations
 - Simple data model (key → value)
 - Values can be simple strings or complex JSON documents
@@ -54,7 +55,7 @@ flowchart TD
 
 Kubernetes stores data in ETCD with a specific structure:
 
-```
+```plain-text
 /registry
 ├── /minions (nodes)
 ├── /pods
@@ -90,6 +91,7 @@ tar xvf etcd-v3.5.x-linux-amd64.tar.gz
 ```
 
 Key service configuration options:
+
 - `--advertise-client-urls`: Address where ETCD listens (configured in kube-apiserver)
 - `--initial-cluster`: Required for HA setups to specify all ETCD instances
 - Certificate options for TLS (covered in security section)
@@ -145,7 +147,7 @@ etcdctl get / --prefix --keys-only
 
 ETCD requires TLS certificates for authentication. Certificate locations in kubeadm setup:
 
-```
+```plain-text
 /etc/kubernetes/pki/etcd/
 ├── ca.crt          # CA certificate
 ├── server.crt      # Server certificate
