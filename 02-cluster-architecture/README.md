@@ -14,8 +14,12 @@ This domain covers how Kubernetes clusters work internally and how to set them u
 - [ ] Understand CRDs, install and configure operators
 
 ## Section Contents
+> ⚠️ **Important:** Content could be not updated on this graphic.
+
+> TODO: Update this everytime I cover a new topic
 
 ```
+
 02-cluster-architecture/
 ├── README.md
 ├── control-plane-components/
@@ -33,6 +37,12 @@ This domain covers how Kubernetes clusters work internally and how to set them u
 ├── crds-operators.md
 └── labs/
 ```
+
+### Control Plane Components
+
+- [control-plane.md](control-plane.md)
+- [etcd.md](etcd.md)
+- [pods.md](pods.md)
 
 ## Control Plane Architecture
 
@@ -252,3 +262,7 @@ kubectl uncordon <control-plane-node>
 3. Upgrade a cluster from 1.30 to 1.31
 4. Install an application using Helm
 5. Configure a highly-available control plane
+
+---
+
+[Back to root folder](../README.md)
