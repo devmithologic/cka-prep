@@ -31,6 +31,11 @@ Managing application deployments and controlling where pods run.
 └── labs/
 ```
 
+### Components
+
+[Replica Sets](replicasets.md)
+
+
 ## Workload Resources Hierarchy
 
 ```mermaid
