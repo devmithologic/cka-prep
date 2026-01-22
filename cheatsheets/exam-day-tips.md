@@ -5,6 +5,7 @@ Practical advice for maximizing your score.
 ## Before the Exam
 
 ### Technical Setup
+
 - [ ] Stable internet connection
 - [ ] Clean desk, no papers/notes
 - [ ] Government ID ready
@@ -12,6 +13,7 @@ Practical advice for maximizing your score.
 - [ ] Camera and microphone working
 
 ### Mental Preparation
+
 - [ ] Good night's sleep
 - [ ] Light meal before exam
 - [ ] Bathroom break before starting
@@ -83,6 +85,7 @@ k explain deployment.spec.strategy
 ## Common Mistakes to Avoid
 
 ### 1. Wrong Namespace
+
 ```bash
 # Always check/set namespace
 kubectl config set-context --current --namespace=<namespace>
@@ -92,6 +95,7 @@ kubectl get pods -n kube-system
 ```
 
 ### 2. Wrong Context
+
 ```bash
 # Verify before each question
 kubectl config current-context
@@ -101,6 +105,7 @@ kubectl config use-context <context>
 ```
 
 ### 3. Not Verifying Work
+
 ```bash
 # Always verify after creating resources
 kubectl get <resource> -o wide
@@ -108,6 +113,7 @@ kubectl describe <resource>
 ```
 
 ### 4. Forgetting to Save YAML Before Editing
+
 ```bash
 # Backup before editing
 kubectl get deployment nginx -o yaml > backup.yaml
@@ -116,21 +122,25 @@ kubectl get deployment nginx -o yaml > backup.yaml
 ## Difficult Question Types
 
 ### ETCD Backup/Restore
+
 - Know the certificate paths
 - Use `ETCDCTL_API=3`
 - Remember to update data-dir after restore
 
 ### Cluster Upgrades
+
 - Drain node first
 - Upgrade kubeadm, then kubelet
 - Uncordon after
 
 ### Network Policies
+
 - Empty selector `{}` means all pods
 - Missing `policyTypes` defaults based on rules
 - Test with a temporary pod
 
 ### Troubleshooting
+
 - Check events: `kubectl describe`
 - Check logs: `kubectl logs` and `journalctl`
 - Check component status in `kube-system`
@@ -154,6 +164,7 @@ kubectl run test --image=busybox:1.28 --rm -it -- nslookup <service>
 ## If Things Go Wrong
 
 ### Pod Won't Start
+
 ```bash
 kubectl describe pod <name>    # Check events
 kubectl logs <name>            # Check logs
@@ -161,6 +172,7 @@ kubectl logs <name> --previous # Previous instance
 ```
 
 ### Can't Connect to Cluster
+
 ```bash
 # Check kubeconfig
 echo $KUBECONFIG
@@ -171,6 +183,7 @@ kubectl config current-context
 ```
 
 ### Command Not Working
+
 ```bash
 # Check syntax
 kubectl explain <resource>
