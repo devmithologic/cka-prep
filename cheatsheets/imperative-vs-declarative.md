@@ -104,8 +104,8 @@ flowchart TD
 ```
 
 **Pros:**
-
 - Single command for all operations
+- 
 - Intelligent - creates if not exists, updates if exists
 - Never fails because object exists/doesn't exist
 - Ideal for production and GitOps
@@ -318,3 +318,116 @@ kubectl get <resource> <name> -o yaml
 5. **`kubectl apply`** is intelligent—creates or updates as needed
 6. **`kubectl explain`** helps you explore resource fields without docs
 7. **`kubectl expose`** is better than `kubectl create service` (uses pod labels)
+8. **Don't mix approaches**—if using `apply`, stick with it
+
+---
+
+## Deep Dive: How kubectl apply Works
+
+Understanding this helps you debug unexpected behavior.
+
+### Three-Way Merge
+
+When you run `kubectl apply`, Kubernetes compares **three sources**:
+
+```mermaid
+flowchart TD
+    LOCAL["Local File<br/>(your YAML)"]
+    LIVE["Live Object<br/>(in cluster)"]
+    LAST["Last Applied Config<br/>(stored as annotation)"]
+    
+    LOCAL --> COMPARE["Compare"]
+    LIVE --> COMPARE
+    LAST --> COMPARE
+    
+    COMPARE --> DECISION["Decide what to change"]
+    DECISION --> UPDATE["Update Live Object"]
+```
+
+| Source | Location | Purpose |
+|--------|----------|---------|
+| **Local file** | Your filesystem | What you want now |
+| **Live object** | Kubernetes cluster memory | Current state |
+| **Last applied config** | Annotation on live object | What you wanted last time |
+
+### Why Three Sources?
+
+The "last applied configuration" helps detect **deleted fields**.
+
+**Example - Deleting a label:**
+
+```yaml
+# Original local file (first apply)
+metadata:
+  labels:
+    app: myapp
+    type: frontend    # This label exists
+
+# Updated local file (second apply)
+metadata:
+  labels:
+    app: myapp
+    # type: frontend  # Label removed!
+```
+
+**How Kubernetes decides:**
+
+| Field | Local File | Last Applied | Live Object | Action |
+|-------|------------|--------------|-------------|--------|
+| `app: myapp` | ✓ | ✓ | ✓ | Keep |
+| `type: frontend` | ✗ | ✓ | ✓ | **Delete** (was in last applied, now removed) |
+| `other: value` | ✗ | ✗ | ✓ | Keep (not managed by apply) |
+
+> 💡 If a field exists in live object but was **never** in last applied config, `apply` leaves it alone. This allows other tools/controllers to add fields without `apply` removing them.
+
+### Where is Last Applied Config Stored?
+
+As an annotation on the live object itself:
+
+```yaml
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Pod","metadata":{"name":"nginx",...}
+```
+
+View it with:
+
+```bash
+kubectl get pod nginx -o yaml | grep -A5 "last-applied"
+```
+
+### Important Warning
+
+> ⚠️ **Don't mix imperative and declarative approaches!**
+
+`kubectl create` and `kubectl replace` do **NOT** store the last applied configuration.
+
+If you:
+
+1. Create with `kubectl create -f pod.yaml`
+2. Later update with `kubectl apply -f pod.yaml`
+
+The three-way merge won't work correctly because there's no "last applied" to compare against.
+
+**Best practice:** Pick one approach and stick with it.
+
+| Approach | Commands to Use |
+|----------|-----------------|
+| Imperative | `create`, `replace`, `delete`, `edit` |
+| Declarative | `apply` for everything |
+
+### Apply Workflow Summary
+
+```mermaid
+flowchart TD
+    A["kubectl apply -f pod.yaml"] --> B{Object exists?}
+    
+    B -->|No| C["Create object"]
+    C --> D["Store local file as<br/>last-applied-configuration"]
+    
+    B -->|Yes| E["Three-way merge"]
+    E --> F["Compare local vs last-applied vs live"]
+    F --> G["Update live object"]
+    G --> H["Update last-applied-configuration"]
+```
